@@ -104,18 +104,35 @@
       100% { transform: scale(1) rotateY(0deg); opacity: 1; }
     }
 
-    /* A4 列印最佳化 */
+    /* A4 列印最佳化：依當前分頁控制列印顯示，並排除導覽與搜尋欄位 */
     @media print {
       .no-print { display: none !important; }
-      #section-tarot, #section-schedule, #section-checklist, #progress-container { display: block !important; }
       body { background-color: #FFFFFF !important; padding: 0 !important; }
       .page-container { border: none !important; box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
       .print-break-inside-avoid { break-inside: avoid; }
       @page { size: A4 portrait; margin: 8mm; }
+
+      /* 分頁列印控制：根據 current-tab-xxx 標籤決定僅印出該分頁內容 */
+      body.current-tab-tarot #section-schedule,
+      body.current-tab-tarot #section-checklist,
+      body.current-tab-tarot #progress-container {
+        display: none !important;
+      }
+
+      body.current-tab-checklist #section-tarot,
+      body.current-tab-checklist #section-schedule {
+        display: none !important;
+      }
+
+      body.current-tab-schedule #section-tarot,
+      body.current-tab-schedule #section-checklist,
+      body.current-tab-schedule #progress-container {
+        display: none !important;
+      }
     }
   </style>
 </head>
-<body class="p-3 sm:p-6 min-h-screen">
+<body class="p-3 sm:p-6 min-h-screen current-tab-all">
 
   <!-- 頂部五大分頁瀏覽導覽列 -->
   <div class="no-print max-w-4xl mx-auto mb-5 bg-white p-3 rounded-3xl border-3 border-butter shadow-sm">
@@ -249,7 +266,7 @@
           </div>
         </div>
 
-        <button onclick="drawStaffTarotCard()" class="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-black text-sm sm:text-base rounded-2xl shadow-md transition transform active:scale-95 flex items-center gap-2">
+        <button onclick="drawStaffTarotCard()" class="no-print px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-black text-sm sm:text-base rounded-2xl shadow-md transition transform active:scale-95 flex items-center gap-2">
           <span>🃏</span> 抽取今日出勤幸運卡
         </button>
       </div>
@@ -692,6 +709,10 @@
 
       const allBtns = [btnAll, btnTarot, btnChecklist, btnSchedule];
       
+      // 更新 body 的 class 以搭配 @media print 做出相應的列印過濾
+      document.body.className = document.body.className.replace(/current-tab-\w+/g, '');
+      document.body.classList.add(`current-tab-${mode}`);
+
       // 重置按鈕樣式
       allBtns.forEach(btn => {
         btn.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center text-stone-600 hover:bg-stone-100";
