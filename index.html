@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺北市大同區 115 年 9 月登革熱病媒蚊密度調查日程與物品清單</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Zen Maru Gothic', sans-serif, system-ui;
+      background-color: #FFFDF5;
+      color: #4A3E3D;
+    }
+    
+    .bg-cream { background-color: #FFFDF0; }
+    .bg-sakura-light { background-color: #FFF0F3; }
+    .bg-mint-light { background-color: #F0FDF4; }
+    .bg-sky-light { background-color: #F0F9FF; }
+    
+    .border-sakura { border-color: #FFB7C5; }
+    .border-mint { border-color: #A7F3D0; }
+    .border-sky { border-color: #BAE6FD; }
+    .border-butter { border-color: #FDE68A; }
+    .border-purple-soft { border-color: #DDD6FE; }
+    .border-3 { border-width: 3px; }
+    
+    /* 日系手繪風貼紙與紙膠帶效果 */
+    .tape-effect-left {
+      position: absolute;
+      top: -12px;
+      left: 24px;
+      width: 75px;
+      height: 24px;
+      background-color: rgba(254, 240, 138, 0.85);
+      transform: rotate(-5deg);
+      border: 1px dashed rgba(217, 119, 6, 0.4);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .tape-effect-right {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      width: 75px;
+      height: 24px;
+      background-color: rgba(254, 202, 202, 0.85);
+      transform: rotate(4deg);
+      border: 1px dashed rgba(225, 29, 72, 0.4);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .tape-effect-center {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1deg);
+      width: 85px;
+      height: 24px;
+      background-color: rgba(233, 213, 255, 0.85);
+      border: 1px dashed rgba(147, 51, 234, 0.4);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* 可愛手繪圓角核取方塊 */
+    .custom-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid #FB7185;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background-color: #FFFFFF;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .custom-checkbox.checked {
+      background-color: #FB7185;
+      border-color: #F43F5E;
+    }
+
+    .custom-checkbox.checked::after {
+      content: '✓';
+      color: white;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .custom-checkbox.checked + label {
+      text-decoration: line-through;
+      color: #A8A29E;
+    }
+
+    /* 卡牌翻牌動畫效果 */
+    .card-flip-animation {
+      animation: flipIn 0.5s ease-out forwards;
+    }
+
+    @keyframes flipIn {
+      0% { transform: scale(0.8) rotateY(90deg); opacity: 0; }
+      100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+    }
+
+    /* A4 列印最佳化 */
+    @media print {
+      .no-print { display: none !important; }
+      #section-tarot, #section-schedule, #section-checklist, #progress-container { display: block !important; }
+      body { background-color: #FFFFFF !important; padding: 0 !important; }
+      .page-container { border: none !important; box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
+      .print-break-inside-avoid { break-inside: avoid; }
+      @page { size: A4 portrait; margin: 8mm; }
+    }
+  </style>
+</head>
+<body class="p-3 sm:p-6 min-h-screen">
+
+  <!-- 頂部五大分頁瀏覽導覽列 -->
+  <div class="no-print max-w-4xl mx-auto mb-5 bg-white p-3 rounded-3xl border-3 border-butter shadow-sm">
+    <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+      
+      <!-- 分頁頁籤按鈕群組 -->
+      <div class="flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2 w-full justify-between">
+        <button onclick="switchTab('all')" id="tab-all" class="flex-1 min-w-[75px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center shadow-sm bg-rose-400 text-white">
+          📖 全部
+        </button>
+        <button onclick="switchTab('tarot')" id="tab-tarot" class="flex-1 min-w-[105px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center text-purple-700 hover:bg-purple-50">
+          🔮 幸運塔羅
+        </button>
+        <button onclick="switchTab('checklist')" id="tab-checklist" class="flex-1 min-w-[85px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center text-emerald-700 hover:bg-emerald-50">
+          🎒 物品清單
+        </button>
+        <button onclick="switchTab('schedule')" id="tab-schedule" class="flex-1 min-w-[75px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center text-sky-700 hover:bg-sky-50">
+          📅 日程表
+        </button>
+        
+        <!-- 操作功能按鈕 -->
+        <div class="flex items-center gap-1">
+          <button onclick="resetChecks()" title="重置勾選" class="py-2 px-2.5 rounded-2xl border-2 border-stone-200 text-stone-600 hover:bg-stone-100 font-bold text-xs sm:text-sm transition flex items-center justify-center">
+            🔄 重置
+          </button>
+          <button onclick="window.print()" title="列印 A4" class="py-2 px-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-stone-900 font-black shadow-sm text-xs sm:text-sm transition flex items-center justify-center">
+            🖨️ 列印 A4
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- A4 主要卡片容器 -->
+  <div class="page-container max-w-4xl mx-auto bg-cream p-4 sm:p-6 rounded-[2.5rem] border-4 border-sakura shadow-lg relative">
+
+    <!-- 頁頭資訊卡 -->
+    <div class="bg-white rounded-3xl border-3 border-sakura p-4 sm:p-5 relative shadow-sm mb-5">
+      <div class="tape-effect-left"></div>
+      <div class="tape-effect-right"></div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- 左側：Q 版熊熊護理師吉祥物 -->
+        <div class="flex-shrink-0 flex flex-col items-center">
+          <svg class="w-20 h-20 sm:w-24 sm:h-24" viewBox="0 0 100 100">
+            <circle cx="23" cy="26" r="14" fill="#FDE047" stroke="#D97706" stroke-width="3.5"/>
+            <circle cx="77" cy="26" r="14" fill="#FDE047" stroke="#D97706" stroke-width="3.5"/>
+            <circle cx="23" cy="26" r="7" fill="#FB7185"/>
+            <circle cx="77" cy="26" r="7" fill="#FB7185"/>
+            <circle cx="50" cy="56" r="38" fill="#FDE047" stroke="#D97706" stroke-width="3.5"/>
+            <circle cx="36" cy="50" r="4.5" fill="#292524"/>
+            <circle cx="64" cy="50" r="4.5" fill="#292524"/>
+            <circle cx="38" cy="48" r="1.5" fill="#FFFFFF"/>
+            <circle cx="66" cy="48" r="1.5" fill="#FFFFFF"/>
+            <ellipse cx="50" cy="60" rx="8" ry="6" fill="#FFFFFF"/>
+            <ellipse cx="50" cy="57" rx="3.5" ry="2.5" fill="#292524"/>
+            <path d="M 46 62 Q 50 66 54 62" stroke="#292524" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="28" cy="58" r="6" fill="#FB7185" opacity="0.6"/>
+            <circle cx="72" cy="58" r="6" fill="#FB7185" opacity="0.6"/>
+            <path d="M 30 30 Q 50 18 70 30 L 66 18 Q 50 12 34 18 Z" fill="#FFFFFF" stroke="#FB7185" stroke-width="2.5"/>
+            <path d="M 45 22 H 55 M 50 17 V 27" stroke="#FB7185" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- 中間：主標題與副標題 -->
+        <div class="text-center flex-grow">
+          <h1 class="text-2xl sm:text-3xl font-black text-rose-500 tracking-wider">
+            臺北市大同區 115 年 9 月份
+          </h1>
+          <h2 class="text-xl sm:text-2xl font-black text-amber-600 mt-1">
+            登革熱病媒蚊密度調查日程與物品清單
+          </h2>
+          <div class="inline-block bg-sakura-light text-rose-600 font-extrabold text-xs sm:text-sm px-4 py-1 rounded-full mt-2 border border-sakura">
+            🌸 勤查孳生源・巡倒清刷最安心 🌸
+          </div>
+        </div>
+
+        <!-- 右側：溫馨對話氣泡 -->
+        <div class="flex-shrink-0 w-full sm:w-auto">
+          <div class="bg-mint-light border-2 border-dashed border-emerald-300 rounded-2xl p-3 text-center sm:text-left shadow-sm">
+            <p class="text-xs sm:text-sm font-black text-emerald-800 leading-snug">
+              🏡 溫馨小叮嚀：<br/>
+              出發前確實清點裝備<br class="hidden sm:inline"/>請準時抵達集合地點！
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 幸運塔羅抽牌區 (分頁: section-tarot) -->
+    <div id="section-tarot" class="bg-gradient-to-br from-purple-100 via-purple-50 to-pink-100 rounded-3xl border-3 border-purple-soft p-5 sm:p-6 mb-5 shadow-md relative">
+      <div class="tape-effect-center"></div>
+
+      <div class="flex flex-col items-center text-center gap-4">
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl sm:text-4xl animate-bounce">🔮</span>
+          <h3 class="font-black text-purple-950 text-lg sm:text-xl tracking-wide">
+            大同區健康服務中心 ‧ 同仁每日幸運塔羅
+          </h3>
+          <span id="tarot-status-badge" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-full font-bold shadow-sm">
+            ✨ 準備抽牌
+          </span>
+        </div>
+
+        <!-- 塔羅牌視覺卡片 + 解牌區域 -->
+        <div class="w-full bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border-2 border-purple-200 shadow-inner flex flex-col md:flex-row items-center gap-4 justify-center">
+          
+          <!-- Q版塔羅牌卡面 (SVG 畫布) -->
+          <div id="tarot-card-graphic" class="w-36 h-56 rounded-2xl border-4 border-amber-300 bg-gradient-to-b from-purple-600 to-indigo-800 p-2 shadow-lg flex flex-col items-center justify-between text-white flex-shrink-0 relative overflow-hidden transition transform hover:scale-105">
+            <!-- 背面預設圖案 -->
+            <div id="card-back" class="w-full h-full border-2 border-dashed border-amber-200/60 rounded-xl flex flex-col items-center justify-center gap-2">
+              <span class="text-3xl">✨</span>
+              <span class="text-xs font-black tracking-widest text-amber-200">TAROT</span>
+              <span class="text-xs font-bold text-purple-200">幸運靈靈卡</span>
+            </div>
+            <!-- 前面動態繪圖 (抽牌後顯示) -->
+            <div id="card-front" class="w-full h-full hidden flex-col items-center justify-between">
+              <span id="card-number" class="text-[10px] font-black tracking-widest text-amber-300 self-start">III</span>
+              <div id="card-svg-container" class="w-20 h-20 flex items-center justify-center my-auto"></div>
+              <span id="card-title" class="text-xs font-black text-amber-200 bg-purple-900/80 px-2 py-0.5 rounded-full border border-amber-300/50">女皇</span>
+            </div>
+          </div>
+
+          <!-- 解牌文字內容 -->
+          <div class="flex-grow text-center md:text-left">
+            <h4 id="tarot-card-heading" class="text-lg font-black text-purple-900 mb-1">【未抽牌】點擊下方按鈕開始</h4>
+            <p id="tarot-result-text" class="text-sm sm:text-base font-bold text-purple-800 leading-relaxed">
+              ✨ 點擊下方按鈕，抽取今日出勤幸運卡，解鎖今日專屬Q版塔羅插畫與出勤祝福！✨
+            </p>
+          </div>
+        </div>
+
+        <button onclick="drawStaffTarotCard()" class="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-black text-sm sm:text-base rounded-2xl shadow-md transition transform active:scale-95 flex items-center gap-2">
+          <span>🃏</span> 抽取今日出勤幸運卡
+        </button>
+      </div>
+    </div>
+
+    <!-- 即時進度條 -->
+    <div id="progress-container" class="bg-white rounded-2xl border-2 border-butter p-3 mb-5 shadow-sm">
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="font-bold text-amber-800 text-xs sm:text-sm flex items-center gap-1">
+          📊 密調包裝備清點進度：<span id="progress-text">0 / 20</span> 項
+        </span>
+        <span id="progress-percent" class="font-black text-rose-500 text-xs sm:text-sm">0%</span>
+      </div>
+      <div class="w-full bg-stone-100 h-3 rounded-full overflow-hidden border border-stone-200">
+        <div id="progress-bar" class="bg-rose-400 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- 1. 調查日程表區域 (分頁: section-schedule) -->
+    <div id="section-schedule" class="mb-6">
+      <div class="bg-white rounded-3xl border-3 border-sky p-3 sm:p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b-2 border-sky-light pb-3">
+          <div class="inline-block bg-sky-light text-sky-800 font-black text-base sm:text-lg px-4 py-1.5 rounded-2xl border border-sky">
+            📅 115 年 9 月份病媒蚊密度調查日程表
+          </div>
+          <div class="no-print w-full sm:w-auto flex items-center gap-2">
+            <span class="text-xs font-bold text-stone-500">🔍 搜尋：</span>
+            <input type="text" id="schedule-search" oninput="filterSchedule()" placeholder="輸入里別、人員或地址..." 
+                   class="px-3 py-1.5 text-xs sm:text-sm border-2 border-sky-200 rounded-xl focus:outline-none focus:border-sky-400 w-full sm:w-48 bg-stone-50">
+          </div>
+        </div>
+
+        <!-- 日程表格 -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse" id="schedule-table">
+            <thead>
+              <tr class="bg-sky-light text-sky-900 border-b-2 border-sky-200 text-center font-bold text-xs sm:text-sm">
+                <th class="py-2.5 px-2 w-[12%]">里別</th>
+                <th class="py-2.5 px-2 w-[14%]">日期 / 星期</th>
+                <th class="py-2.5 px-2 w-[10%]">時間</th>
+                <th class="py-2.5 px-3 text-left w-[36%]">集合地點 / 中心人員</th>
+                <th class="py-2.5 px-2 w-[10%]">工時人員</th>
+                <th class="py-2.5 px-2 w-[10%]">志工</th>
+                <th class="py-2.5 px-2 w-[8%]">支援</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-dashed divide-sky-100 text-stone-800 text-xs sm:text-sm font-semibold">
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">重慶里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月1日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">重慶北路三段347號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">蔡雅安</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">保安里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月1日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">重慶北路三段295巷6號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">羅毓婉</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">老師里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月3日 (四)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">哈密街158號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">陳家瑋</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">碧霞</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">鄰江里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月3日 (四)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">酒泉街158號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林靖雯</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">梅蘭</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">民權里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月4日 (五)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">寧夏路131號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">吳恩綺</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">雙連里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月4日 (五)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">歸綏街126號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">趙佩儀</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">星明里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月7日 (一)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">太原路161巷4號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">倩姿</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">光能里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月7日 (一)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">承德路二段33號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">王虹雅</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">建功里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月8日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">重慶北路一段83巷37號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">游蕙慈</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">建明里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月8日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">華陰街99號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">張雁茹</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">大有里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月9日 (三)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">民樂街115號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">葉智婷</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">永樂里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月9日 (三)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">南京西路239巷31號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">林早美</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+                <td class="py-2.5 px-2 text-center text-stone-400">-</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">延平里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月15日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">09:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">甘州街12號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">沛誼</td>
+                <td class="py-2.5 px-2 text-center font-bold text-indigo-600">馬偕學生</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">朝陽里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月15日 (二)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">重慶北路二段46巷6號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">素惠</td>
+                <td class="py-2.5 px-2 text-center font-bold text-indigo-600">馬偕學生</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">至聖里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月17日 (四)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">08:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">民族西路169巷38號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">嗣蕙</td>
+                <td class="py-2.5 px-2 text-center font-bold text-indigo-600">馬偕學生</td>
+              </tr>
+              <tr class="hover:bg-sky-light/60 transition schedule-row">
+                <td class="py-2.5 px-2 text-center font-black text-sky-700 text-sm sm:text-base">揚雅里</td>
+                <td class="py-2.5 px-2 text-center text-amber-700 font-bold">9月17日 (四)</td>
+                <td class="py-2.5 px-2 text-center font-bold text-stone-600">10:30</td>
+                <td class="py-2.5 px-3"><span class="font-bold text-stone-800">重慶北路三段113巷56號</span> <span class="ml-1 px-2 py-0.5 bg-rose-100 text-rose-700 text-xs rounded-md font-bold">林明憲</span></td>
+                <td class="py-2.5 px-2 text-center text-teal-700 font-bold">張明倫</td>
+                <td class="py-2.5 px-2 text-center text-purple-700 font-bold">金迎</td>
+                <td class="py-2.5 px-2 text-center font-bold text-indigo-600">馬偕學生</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 聯絡方式與異動提醒 -->
+        <div class="mt-4 pt-3 border-t border-sky-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm bg-sky-light/80 p-3 rounded-2xl border border-sky">
+          <div class="flex flex-wrap items-center gap-3 text-sky-900 font-bold">
+            <span>☎️ 聯絡電話：25853227 轉 6653</span>
+            <span>📱 手機：0937-393-732 (林明憲約聘管理師)</span>
+          </div>
+          <div class="text-rose-600 font-bold text-xs">
+            ⚠️ 以上行程可能因天氣或其他因素有所調整
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 三大分類物品清單區域 (分頁: section-checklist) -->
+    <div id="section-checklist" class="space-y-5">
+      
+      <!-- 第一類：個人防護裝備 -->
+      <div class="bg-white rounded-3xl border-3 border-sakura p-4 shadow-sm print-break-inside-avoid">
+        <div class="flex items-center justify-between border-b-2 border-rose-100 pb-2.5 mb-3">
+          <h3 class="font-black text-rose-600 text-base sm:text-lg flex items-center gap-2">
+            <span>🧢</span> 第一類：個人防護與隨身裝備 (PPE & Personal Tools)
+          </h3>
+          <span class="bg-sakura-light text-rose-600 text-xs font-bold px-3 py-1 rounded-full border border-sakura">共 7 項</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">防蚊液 / 噴霧 (1罐)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">防曬用品 - 防曬帽 (1頂)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">防曬用品 - 雨具 (1件)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">橡膠手套 (1雙)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">布手套 (1雙)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">個人飲用水 / 水壺 (1瓶)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-sakura-light/40 p-2.5 rounded-2xl border border-rose-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">服務證 / 識別證 (1張)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二類：幼蟲採集與檢測裝備 -->
+      <div class="bg-white rounded-3xl border-3 border-butter p-4 shadow-sm print-break-inside-avoid">
+        <div class="flex items-center justify-between border-b-2 border-amber-100 pb-2.5 mb-3">
+          <h3 class="font-black text-amber-700 text-base sm:text-lg flex items-center gap-2">
+            <span>🔬</span> 第二類：幼蟲採集與清除裝備 (Sampling & Control Tools)
+          </h3>
+          <span class="bg-amber-50 text-amber-700 text-xs font-bold px-3 py-1 rounded-full border border-amber-200">共 9 項</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">採樣瓶 (裝孑孓專用) (5個)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">吸管(大) (吸孑孓用) (2支)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">吸管(小) (吸孑孓用) (2支)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">濾網杓 (過濾孑孓用) (1支)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">折疊式水勺 (1個)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">手電筒 (1支)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">清潔刷 (1支)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">環境用藥 (蘇力菌/百利普芬) (1包)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-amber-50/50 p-2.5 rounded-2xl border border-amber-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">標籤紙 / 油性筆 (1組)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三類：宣導衛教與行政表單 -->
+      <div class="bg-white rounded-3xl border-3 border-mint p-4 shadow-sm print-break-inside-avoid">
+        <div class="flex items-center justify-between border-b-2 border-emerald-100 pb-2.5 mb-3">
+          <h3 class="font-black text-emerald-700 text-base sm:text-lg flex items-center gap-2">
+            <span>📄</span> 第三類：宣導衛教與行政表單 (Admin & Documents)
+          </h3>
+          <span class="bg-mint-light text-emerald-700 text-xs font-bold px-3 py-1 rounded-full border border-mint">共 4 項</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <div class="flex items-center gap-2.5 bg-mint-light/50 p-2.5 rounded-2xl border border-emerald-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">密度調查紀錄表 (1份)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-mint-light/50 p-2.5 rounded-2xl border border-emerald-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">傳染病源改善通知單 (若干)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-mint-light/50 p-2.5 rounded-2xl border border-emerald-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">案件舉發暨陳述意見通知書 (若干)</label>
+          </div>
+          <div class="flex items-center gap-2.5 bg-mint-light/50 p-2.5 rounded-2xl border border-emerald-100">
+            <div class="custom-checkbox" onclick="toggleCheck(this)"></div>
+            <label class="text-sm font-bold text-stone-700 cursor-pointer select-none">請假證明 / 衛教單張 (若干)</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- 腳本區域 -->
+  <script>
+    // 塔羅牌清單資料庫 (包含 SVG 卡牌圖案)
+    const staffTarotCards = [
+      {
+        num: "III",
+        title: "女皇",
+        cardBg: "from-pink-500 to-rose-600",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="35" fill="#FCE7F3"/><path d="M 50 20 L 58 38 L 78 38 L 62 50 L 68 70 L 50 58 L 32 70 L 38 50 L 22 38 L 42 38 Z" fill="#F43F5E"/><circle cx="50" cy="45" r="10" fill="#FEF08A"/><path d="M 40 75 Q 50 65 60 75" stroke="#F43F5E" stroke-width="4" stroke-linecap="round" fill="none"/></svg>`,
+        fortuneHeading: "【正位・女皇】跨組協調溝通無阻！",
+        fortuneText: "志工與人員調配默契滿分，現場巡查充滿溫暖與包容，今日密調大吉！👑"
+      },
+      {
+        num: "I",
+        title: "魔術師",
+        cardBg: "from-amber-400 to-orange-500",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="35" fill="#FEF3C7"/><path d="M 35 30 Q 50 15 65 30 L 60 65 H 40 Z" fill="#F59E0B"/><circle cx="50" cy="20" r="6" fill="#10B981"/><path d="M 30 75 L 70 75" stroke="#D97706" stroke-width="5" stroke-linecap="round"/></svg>`,
+        fortuneHeading: "【正位・魔術師】資材調撥井然有序！",
+        fortuneText: "20項密調包裝備一應俱全，靈活應變所有採樣與衛教挑戰，手到擒來！🪄"
+      },
+      {
+        num: "XIX",
+        title: "太陽",
+        cardBg: "from-amber-300 to-yellow-500",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="22" fill="#FBBF24"/><g stroke="#F59E0B" stroke-width="4" stroke-linecap="round"><line x1="50" y1="12" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="88"/><line x1="12" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="88" y2="50"/><line x1="23" y1="23" x2="29" y2="29"/><line x1="71" y1="71" x2="77" y2="77"/><line x1="23" y1="77" x2="29" y2="71"/><line x1="71" y1="29" x2="77" y2="23"/></g><circle cx="43" cy="45" r="3" fill="#78350F"/><circle cx="57" cy="45" r="3" fill="#78350F"/><path d="M 43 54 Q 50 60 57 54" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+        fortuneHeading: "【正位・太陽】數據順暢登錄！",
+        fortuneText: "CDC平台即時報備無誤差，氣場陽光充沛，出勤一路順暢到底！🌞"
+      },
+      {
+        num: "VIII",
+        title: "力量",
+        cardBg: "from-emerald-400 to-teal-600",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="35" fill="#D1FAE5"/><path d="M 50 25 C 30 10 20 35 50 65 C 80 35 70 10 50 25 Z" fill="#10B981"/><path d="M 35 72 Q 50 82 65 72" stroke="#047857" stroke-width="4" stroke-linecap="round" fill="none"/></svg>`,
+        fortuneHeading: "【正位・力量】溫和包容衛教！",
+        fortuneText: "同仁與鄰里民眾互動融洽，展現高度專業與耐心，衛教宣導成果顯著！🦁"
+      },
+      {
+        num: "XXI",
+        title: "世界",
+        cardBg: "from-blue-500 to-indigo-600",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="32" fill="none" stroke="#60A5FA" stroke-width="6" stroke-dasharray="8 4"/><circle cx="50" cy="50" r="20" fill="#93C5FD"/><path d="M 42 48 L 48 54 L 60 42" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+        fortuneHeading: "【正位・世界】圓滿達成任務！",
+        fortuneText: "今日中心同仁密調督導清單全數完成，萬事齊備，歡喜打卡歸檔！🌍"
+      },
+      {
+        num: "★",
+        title: "數據登錄",
+        cardBg: "from-purple-500 to-violet-700",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><rect x="20" y="25" width="60" height="42" rx="6" fill="#DDD6FE" stroke="#7C3AED" stroke-width="4"/><path d="M 30 75 L 70 75 M 50 67 V 75" stroke="#7C3AED" stroke-width="4" stroke-linecap="round"/><path d="M 30 38 H 50 M 30 46 H 65 M 30 54 H 55" stroke="#6D28D9" stroke-width="3" stroke-linecap="round"/></svg>`,
+        fortuneHeading: "【正位・數據登錄】資訊無縫連線！",
+        fortuneText: "今日密調數據登錄一氣呵成，表單與系統對齊毫無遺漏，資料歸檔完美流暢！💻"
+      },
+      {
+        num: "★",
+        title: "零缺失",
+        cardBg: "from-teal-400 to-emerald-600",
+        svg: `<svg viewBox="0 0 100 100" class="w-16 h-16"><circle cx="50" cy="50" r="32" fill="#CCFBF1" stroke="#14B8A6" stroke-width="4"/><path d="M 32 50 L 44 62 L 68 38" stroke="#0F766E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+        fortuneHeading: "【正位・零缺失】督導品質卓越！",
+        fortuneText: "巡倒清刷宣導精準到位，孳生源清除零死角，獲得滿滿成就感！✨"
+      }
+    ];
+
+    function drawStaffTarotCard() {
+      const resultText = document.getElementById('tarot-result-text');
+      const heading = document.getElementById('tarot-card-heading');
+      const badge = document.getElementById('tarot-status-badge');
+      const cardGraphic = document.getElementById('tarot-card-graphic');
+      const cardBack = document.getElementById('card-back');
+      const cardFront = document.getElementById('card-front');
+
+      badge.innerText = "🔮 解牌中...";
+      badge.className = "text-xs bg-amber-400 text-stone-900 px-3 py-1 rounded-full font-bold animate-pulse shadow-sm";
+      cardGraphic.classList.add('card-flip-animation');
+
+      setTimeout(() => {
+        const card = staffTarotCards[Math.floor(Math.random() * staffTarotCards.length)];
+
+        // 更新牌面
+        cardBack.classList.add('hidden');
+        cardFront.classList.remove('hidden');
+        cardFront.classList.add('flex');
+
+        document.getElementById('card-number').innerText = card.num;
+        document.getElementById('card-title').innerText = card.title;
+        document.getElementById('card-svg-container').innerHTML = card.svg;
+        cardGraphic.className = `w-36 h-56 rounded-2xl border-4 border-amber-300 bg-gradient-to-b ${card.cardBg} p-2 shadow-lg flex flex-col items-center justify-between text-white flex-shrink-0 relative overflow-hidden transition transform hover:scale-105`;
+
+        // 更新文字
+        heading.innerText = card.fortuneHeading;
+        resultText.innerText = card.fortuneText;
+
+        badge.innerText = "✨ 同仁幸運卡已揭曉";
+        badge.className = "text-xs bg-purple-600 text-white px-3 py-1 rounded-full font-bold shadow-sm";
+        cardGraphic.classList.remove('card-flip-animation');
+      }, 350);
+    }
+
+    // 五大分頁切換控制邏輯
+    function switchTab(mode) {
+      const tarotSec = document.getElementById('section-tarot');
+      const scheduleSec = document.getElementById('section-schedule');
+      const checklistSec = document.getElementById('section-checklist');
+      const progressContainer = document.getElementById('progress-container');
+
+      const btnAll = document.getElementById('tab-all');
+      const btnTarot = document.getElementById('tab-tarot');
+      const btnChecklist = document.getElementById('tab-checklist');
+      const btnSchedule = document.getElementById('tab-schedule');
+
+      const allBtns = [btnAll, btnTarot, btnChecklist, btnSchedule];
+      
+      // 重置按鈕樣式
+      allBtns.forEach(btn => {
+        btn.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center text-stone-600 hover:bg-stone-100";
+      });
+
+      if (mode === 'all') {
+        tarotSec.style.display = 'block';
+        scheduleSec.style.display = 'block';
+        checklistSec.style.display = 'block';
+        progressContainer.style.display = 'block';
+        btnAll.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center shadow-sm bg-rose-400 text-white";
+      } else if (mode === 'tarot') {
+        tarotSec.style.display = 'block';
+        scheduleSec.style.display = 'none';
+        checklistSec.style.display = 'none';
+        progressContainer.style.display = 'none';
+        btnTarot.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center shadow-sm bg-purple-500 text-white";
+      } else if (mode === 'checklist') {
+        tarotSec.style.display = 'none';
+        scheduleSec.style.display = 'none';
+        checklistSec.style.display = 'block';
+        progressContainer.style.display = 'block';
+        btnChecklist.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center shadow-sm bg-emerald-500 text-white";
+      } else if (mode === 'schedule') {
+        tarotSec.style.display = 'none';
+        scheduleSec.style.display = 'block';
+        checklistSec.style.display = 'none';
+        progressContainer.style.display = 'none';
+        btnSchedule.className = "flex-1 min-w-[70px] py-2 px-2.5 rounded-2xl text-xs sm:text-sm font-black transition text-center shadow-sm bg-sky-500 text-white";
+      }
+    }
+
+    function filterSchedule() {
+      const input = document.getElementById('schedule-search').value.toLowerCase().trim();
+      const rows = document.querySelectorAll('.schedule-row');
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+      });
+    }
+
+    function toggleCheck(element) {
+      element.classList.toggle('checked');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const allBoxes = document.querySelectorAll('.custom-checkbox');
+      const checkedBoxes = document.querySelectorAll('.custom-checkbox.checked');
+      const total = allBoxes.length;
+      const checkedCount = checkedBoxes.length;
+      const percentage = Math.round((checkedCount / total) * 100);
+
+      document.getElementById('progress-text').innerText = `${checkedCount} / ${total}`;
+      document.getElementById('progress-percent').innerText = `${percentage}%`;
+      document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
+
+    function resetChecks() {
+      const checkedBoxes = document.querySelectorAll('.custom-checkbox.checked');
+      checkedBoxes.forEach(box => box.classList.remove('checked'));
+      updateProgress();
+    }
+
+    window.onload = function() {
+      updateProgress();
+    };
+  </script>
+</body>
+</html>
